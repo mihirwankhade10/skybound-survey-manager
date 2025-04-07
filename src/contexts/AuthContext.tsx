@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '@/services/api';
@@ -6,12 +7,20 @@ import { useToast } from '@/components/ui/use-toast';
 // Define types
 interface User {
   id: string;
+=======
+
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+interface User {
+>>>>>>> f469395adaf10a8b7eca65a5c6a05e18de6fac70
   name: string;
   email: string;
   role: string;
 }
 
 interface AuthContextType {
+<<<<<<< HEAD
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
@@ -140,10 +149,68 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         logout,
       }}
     >
+=======
+  isAuthenticated: boolean;
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+  user: null,
+  login: () => {},
+  logout: () => {},
+});
+
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in from localStorage
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const storedUser = localStorage.getItem("user");
+    
+    if (isLoggedIn && storedUser) {
+      setIsAuthenticated(true);
+      setUser(JSON.parse(storedUser));
+    }
+    
+    setLoading(false);
+  }, []);
+
+  const login = (userData: User) => {
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("user", JSON.stringify(userData));
+    setIsAuthenticated(true);
+    setUser(userData);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
+    setIsAuthenticated(false);
+    setUser(null);
+    navigate("/login");
+  };
+
+  if (loading) {
+    return <div className="h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+>>>>>>> f469395adaf10a8b7eca65a5c6a05e18de6fac70
       {children}
     </AuthContext.Provider>
   );
 };
+<<<<<<< HEAD
 
 // Custom hook to use auth context
 export const useAuth = () => {
@@ -153,3 +220,5 @@ export const useAuth = () => {
   }
   return context;
 };
+=======
+>>>>>>> f469395adaf10a8b7eca65a5c6a05e18de6fac70
