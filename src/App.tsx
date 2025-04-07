@@ -1,10 +1,11 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Sidebar from "@/components/layout/Sidebar";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import LoginPage from "@/pages/Auth/LoginPage";
 import Index from "./pages/Index";
 import MissionPlanning from "./pages/MissionPlanning";
 import FleetManagement from "./pages/FleetManagement";
@@ -20,19 +21,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="flex h-screen overflow-hidden">
-          <Sidebar />
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Index />} />
               <Route path="/mission-planning" element={<MissionPlanning />} />
               <Route path="/fleet-management" element={<FleetManagement />} />
               <Route path="/mission-monitoring" element={<MissionMonitoring />} />
               <Route path="/survey-reports" element={<SurveyReports />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
-        </div>
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
