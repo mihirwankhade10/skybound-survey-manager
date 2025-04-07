@@ -1,5 +1,5 @@
 
-import { Calendar, Drone, MapPin, Clock, BarChart3 } from "lucide-react";
+import { Calendar, MapPin, Clock, BarChart3 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import Header from "@/components/layout/Header";
 import StatsCard from "@/components/dashboard/StatsCard";
@@ -7,6 +7,7 @@ import MissionStatusChart from "@/components/dashboard/MissionStatusChart";
 import MissionTable from "@/components/dashboard/MissionTable";
 import DroneMissionMap from "@/components/map/DroneMissionMap";
 import { dashboardStats, missions, monthlyMissionData } from "@/lib/mockData";
+import DroneIcon from "@/components/common/DroneIcon";
 
 const Index = () => {
   // Only show the latest 5 missions
@@ -47,7 +48,7 @@ const Index = () => {
             <StatsCard 
               title="Total Drones" 
               value={dashboardStats.totalDrones}
-              icon={<Drone size={18} />} 
+              icon={<DroneIcon size={18} />} 
             />
           </div>
 

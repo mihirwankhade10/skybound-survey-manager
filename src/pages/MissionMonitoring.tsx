@@ -8,9 +8,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Pause, Play, Square, AlertTriangle, Drone, Battery, Wind, MapPin } from "lucide-react";
+import { Pause, Play, Square, AlertTriangle, Battery, Wind, MapPin } from "lucide-react";
 import StatusBadge from "@/components/common/StatusBadge";
 import { useToast } from "@/components/ui/use-toast";
+import DroneIcon from "@/components/common/DroneIcon";
 
 const MissionMonitoring = () => {
   const { toast } = useToast();
@@ -95,7 +96,7 @@ const MissionMonitoring = () => {
                       
                       <div className="grid grid-cols-2 gap-4">
                         <div className="flex items-center text-sm">
-                          <Drone size={16} className="mr-2 text-muted-foreground" />
+                          <DroneIcon size={16} className="mr-2 text-muted-foreground" />
                           <div>
                             <div className="text-muted-foreground">Drone</div>
                             <div className="font-medium">{selectedMission.droneId}</div>
@@ -191,7 +192,7 @@ const MissionMonitoring = () => {
             </div>
           ) : (
             <div className="text-center py-20 bg-white rounded-lg border">
-              <Drone size={48} className="mx-auto text-muted-foreground mb-4" />
+              <DroneIcon size={48} className="mx-auto text-muted-foreground mb-4" />
               <h2 className="text-xl font-medium mb-2">No Active Missions</h2>
               <p className="text-muted-foreground">
                 There are no missions currently in progress.
