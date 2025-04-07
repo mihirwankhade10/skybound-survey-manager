@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -6,10 +5,12 @@ import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
   redirectPath?: string;
+  children?: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  redirectPath = '/login'
+  redirectPath = '/login',
+  children
 }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
@@ -22,33 +23,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to={redirectPath} replace />;
-=======
-
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import Sidebar from "@/components/layout/Sidebar";
-
-interface ProtectedRouteProps {
-  children?: React.ReactNode;
-}
-
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={redirectPath} replace />;
   }
-
-  return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {children || <Outlet />}
-      </div>
-    </div>
-  );
->>>>>>> f469395adaf10a8b7eca65a5c6a05e18de6fac70
+  
+  return children || <Outlet />;
 };
 
 export default ProtectedRoute;
