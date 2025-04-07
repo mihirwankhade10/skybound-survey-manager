@@ -1,10 +1,9 @@
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { MissionStatus, DroneStatus } from "@/lib/mockData";
 
 interface StatusBadgeProps {
-  status: MissionStatus | DroneStatus;
+  status: string;
   size?: "sm" | "md" | "lg";
 }
 
