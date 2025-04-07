@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { DroneIcon } from "@/components/common/DroneIcon";
+import Drone from "@/components/common/DroneIcon";
 
 const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -104,7 +103,7 @@ const LoginPage: React.FC = () => {
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-2">
-            <DroneIcon size={40} className="text-drone-teal" />
+            <Drone size={40} className="text-drone-teal" />
           </div>
           <CardTitle className="text-2xl">DroneVision</CardTitle>
           <CardDescription>
