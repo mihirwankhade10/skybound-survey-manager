@@ -174,7 +174,7 @@ const MissionPlanning = () => {
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <div className="flex-1 p-6 overflow-auto bg-gray-50">
+      <div className="flex-1 p-6 bg-gray-50 overflow-auto">
         <div className="max-w-7xl mx-auto">
           {error && (
             <Alert variant="destructive" className="mb-6">
@@ -334,7 +334,7 @@ const MissionPlanning = () => {
                               variant="outline"
                               className="w-full justify-start text-left font-normal h-10"
                             >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              <CalendarIcon />
                               {date ? format(date, "PPP") : <span className="text-muted-foreground">Select date</span>}
                             </Button>
                           </PopoverTrigger>

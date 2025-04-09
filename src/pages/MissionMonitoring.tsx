@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import DroneMissionMap from "@/components/map/DroneMissionMap";
@@ -49,6 +48,7 @@ const MissionMonitoring = () => {
   }, [selectedMissionId, isPaused]);
   
   const fetchActiveMissions = async () => {
+    // Function implementation unchanged
     setIsLoading(true);
     try {
       const response = await missionsAPI.getAllMissions();
@@ -76,6 +76,7 @@ const MissionMonitoring = () => {
   };
   
   const fetchMissionData = async () => {
+    // Function implementation unchanged
     if (!selectedMissionId) return;
     
     try {
@@ -97,6 +98,7 @@ const MissionMonitoring = () => {
   };
   
   const fetchDroneTelemetry = async (droneId: string) => {
+    // Function implementation unchanged
     try {
       const response = await monitorAPI.getDroneTelemetry(droneId);
       setTelemetryData(response.data.data);
@@ -106,14 +108,12 @@ const MissionMonitoring = () => {
   };
   
   const handlePauseResume = async () => {
+    // Function implementation unchanged
     if (!missionData) return;
     
     try {
-      // In a real implementation, you would send a command to the drone
-      // Here we're just updating the UI state
       setIsPaused(!isPaused);
       
-      // Update mission status on the backend
       await monitorAPI.updateMissionStatus(selectedMissionId, {
         status: isPaused ? "In Progress" : "Paused"
       });
@@ -123,7 +123,6 @@ const MissionMonitoring = () => {
         description: `${missionData.name} has been ${isPaused ? "resumed" : "paused"}.`,
       });
       
-      // Refresh mission data
       fetchMissionData();
     } catch (error) {
       console.error('Error updating mission status:', error);
@@ -136,10 +135,10 @@ const MissionMonitoring = () => {
   };
   
   const handleAbort = async () => {
+    // Function implementation unchanged
     if (!missionData) return;
     
     try {
-      // Update mission status on the backend
       await monitorAPI.updateMissionStatus(selectedMissionId, {
         status: "Aborted"
       });
@@ -150,7 +149,6 @@ const MissionMonitoring = () => {
         variant: "destructive"
       });
       
-      // Refresh mission list and data
       fetchActiveMissions();
       fetchMissionData();
     } catch (error) {
@@ -187,7 +185,15 @@ const MissionMonitoring = () => {
                   {activeMissions.length > 0 ? (
                     activeMissions.map(mission => (
                       <SelectItem key={mission._id} value={mission._id}>
-                        {mission.name} {mission.location?.address ? `(${mission.location.address})` : ''}
+                        {/* Limit the text length of mission names to prevent overflow */}
+                        {mission.name.length > 30 
+                          ? `${mission.name.substring(0, 30)}...` 
+                          : mission.name} 
+                        {mission.location?.address 
+                          ? ` (${mission.location.address.length > 20 
+                              ? `${mission.location.address.substring(0, 20)}...` 
+                              : mission.location.address})` 
+                          : ''}
                       </SelectItem>
                     ))
                   ) : (
@@ -207,7 +213,7 @@ const MissionMonitoring = () => {
               {/* Mission Map */}
               <div className="lg:col-span-2">
                 <DroneMissionMap 
-                  title={`Live Tracking: ${missionData.name}`} 
+                  title={`Live Tracking: ${missionData.name.length > 30 ? `${missionData.name.substring(0, 30)}...` : missionData.name}`} 
                   currentPosition={missionData.currentLocation?.coordinates ? 
                     { lat: missionData.currentLocation.coordinates[1], lng: missionData.currentLocation.coordinates[0] } : 
                     undefined
@@ -227,8 +233,14 @@ const MissionMonitoring = () => {
                 <Card>
                   <CardContent className="pt-6 space-y-4">
                     <div className="flex justify-between items-center">
-                      <h2 className="text-lg font-semibold">{missionData.name}</h2>
-                      <StatusBadge status={missionData.status} />
+                      {/* Truncate mission name if too long */}
+                      <h2 className="text-lg font-semibold truncate max-w-[70%]" title={missionData.name}>
+                        {missionData.name}
+                      </h2>
+                      {/* Fixed width for status badge to prevent overflow */}
+                      <div className="min-w-[100px] text-right">
+                        <StatusBadge status={missionData.status} />
+                      </div>
                     </div>
                     
                     <div className="space-y-4">
@@ -242,16 +254,16 @@ const MissionMonitoring = () => {
                       
                       <div className="grid grid-cols-2 gap-4">
                         <div className="flex items-center text-sm">
-                          <DroneIcon size={16} className="mr-2 text-muted-foreground" />
-                          <div>
+                          <DroneIcon size={16} className="mr-2 flex-shrink-0 text-muted-foreground" />
+                          <div className="overflow-hidden">
                             <div className="text-muted-foreground">Drone</div>
-                            <div className="font-medium">
+                            <div className="font-medium truncate" title={missionData.droneInfo ? `${missionData.droneInfo.model} (${missionData.droneInfo.droneId})` : 'None assigned'}>
                               {missionData.droneInfo ? `${missionData.droneInfo.model} (${missionData.droneInfo.droneId})` : 'None assigned'}
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center text-sm">
-                          <Battery size={16} className="mr-2 text-muted-foreground" />
+                          <Battery size={16} className="mr-2 flex-shrink-0 text-muted-foreground" />
                           <div>
                             <div className="text-muted-foreground">Battery</div>
                             <div className="font-medium">
@@ -260,16 +272,16 @@ const MissionMonitoring = () => {
                           </div>
                         </div>
                         <div className="flex items-center text-sm">
-                          <MapPin size={16} className="mr-2 text-muted-foreground" />
-                          <div>
+                          <MapPin size={16} className="mr-2 flex-shrink-0 text-muted-foreground" />
+                          <div className="overflow-hidden">
                             <div className="text-muted-foreground">Location</div>
-                            <div className="font-medium">
+                            <div className="font-medium truncate" title={missionData.location?.address || 'Unknown location'}>
                               {missionData.location?.address || 'Unknown location'}
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center text-sm">
-                          <Wind size={16} className="mr-2 text-muted-foreground" />
+                          <Wind size={16} className="mr-2 flex-shrink-0 text-muted-foreground" />
                           <div>
                             <div className="text-muted-foreground">Wind</div>
                             <div className="font-medium">
@@ -298,7 +310,7 @@ const MissionMonitoring = () => {
                       </div>
                       
                       <div className="text-muted-foreground">Coordinates:</div>
-                      <div className="font-medium">
+                      <div className="font-medium overflow-hidden text-ellipsis">
                         {missionData.currentLocation?.coordinates ? 
                           `${missionData.currentLocation.coordinates[1].toFixed(4)}° N, ${missionData.currentLocation.coordinates[0].toFixed(4)}° W` : 
                           'N/A'}
@@ -320,34 +332,34 @@ const MissionMonitoring = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <Button 
                       variant="outline" 
-                      className="flex-1 justify-start"
+                      className="flex items-center justify-center text-sm lg:text-base w-full px-2"
                       onClick={handlePauseResume}
                     >
                       {isPaused ? (
                         <>
-                          <Play size={16} className="mr-2" />
-                          Resume Mission
+                          <Play size={16} className="mr-1 flex-shrink-0" />
+                          <span className="truncate">Resume Mission</span>
                         </>
                       ) : (
                         <>
-                          <Pause size={16} className="mr-2" />
-                          Pause Mission
+                          <Pause size={16} className="mr-1 flex-shrink-0" />
+                          <span className="truncate">Pause Mission</span>
                         </>
                       )}
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="flex-1 justify-start text-drone-danger hover:text-drone-danger hover:border-drone-danger"
+                      className="flex items-center justify-center text-sm lg:text-base w-full px-2 text-drone-danger hover:text-drone-danger hover:border-drone-danger"
                       onClick={handleAbort}
                     >
-                      <Square size={16} className="mr-2" />
-                      Abort Mission
+                      <Square size={16} className="mr-1 flex-shrink-0" />
+                      <span className="truncate">Abort Mission</span>
                     </Button>
                   </div>
                   
                   <Alert className="bg-amber-50 text-amber-800 border-amber-200">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertDescription>
+                    <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+                    <AlertDescription className="text-sm">
                       Warning: Low visibility conditions detected. Consider pausing the mission.
                     </AlertDescription>
                   </Alert>

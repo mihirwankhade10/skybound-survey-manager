@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+body {
+  overflow: hidden; /* or overflow-y: hidden; for vertical scroll only */
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
