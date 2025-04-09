@@ -104,6 +104,9 @@ export const monitorAPI = {
   
   getDroneTelemetry: (droneId: string) => 
     API.get(`/monitor/drone/${droneId}/telemetry`),
+    
+  updateMissionStatus: (missionId: string, statusData: any) => 
+    API.post(`/monitor/${missionId}/update`, statusData),
 };
 
 // Survey Reports API calls
