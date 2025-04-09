@@ -400,7 +400,9 @@ const SurveyReports = () => {
                             <TableCell>{mission.distanceFlown ? `${mission.distanceFlown} km` : "N/A"}</TableCell>
                             <TableCell className="whitespace-nowrap">{mission.droneId || "Not assigned"}</TableCell>
                             <TableCell>
+                            <div className="w-[110px]">
                               <StatusBadge status={mission.status} />
+                            </div>
                             </TableCell>
                           </TableRow>
                         ))
